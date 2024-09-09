@@ -1,6 +1,6 @@
 import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
-import { users } from "@/lib/drizzle/schemas/domain/users";
+import { InferSelectModel, relations } from "drizzle-orm";
+import { users } from "@/lib/drizzle/schema/users/schema";
 
 export const tasks = pgTable("tasks", {
   id: uuid("id").primaryKey(),
@@ -19,3 +19,5 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export type TasksInferSelect = InferSelectModel<typeof tasks>;
