@@ -1,13 +1,8 @@
-import { signIn } from "@/lib/auth/auth";
+import { login } from "@/features/authentication/credentials/actions";
 
-export default function SignIn(): JSX.Element {
+const SignIn = (): JSX.Element => {
   return (
-    <form
-      action={async (formData) => {
-        "use server";
-        await signIn("credentials", formData);
-      }}
-    >
+    <form action={login}>
       <label>
         Email
         <input name="email" type="email" />
@@ -19,4 +14,6 @@ export default function SignIn(): JSX.Element {
       <button>Sign In</button>
     </form>
   );
-}
+};
+
+export default SignIn;

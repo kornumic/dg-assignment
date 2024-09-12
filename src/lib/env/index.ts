@@ -16,6 +16,8 @@ const envSchema = z.object({
     .enum(["development", "test", "production"])
     .default("development"),
   DATABASE_URL: z.string(),
+  AUTH_URL: z.string(),
+  AUTH_SECRET: z.string(),
 });
 
 export const prettifyIssues = (issues: ZodIssue[]) => {
