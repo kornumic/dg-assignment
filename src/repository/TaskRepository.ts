@@ -14,6 +14,10 @@ export interface TasksRepository {
   ): Promise<Task[]>;
 
   createTask(task: NewTask): Promise<Task>;
+
+  updateTask(taskId: string, task: Task): Promise<Task>;
+
+  deleteTask(taskId: string): Promise<void>;
 }
 
 export class TasksDrizzleRepository implements TasksRepository {
@@ -65,12 +69,39 @@ export class TasksDrizzleRepository implements TasksRepository {
       id: id,
       title: task.title,
       description: task.description,
-      completed: false,
+      completed: task.completed,
       created_at: now,
       owner_id: task.ownerId,
     };
 
     await this.drizzle.insert(tasks).values(insertedTask);
-    return new Task(insertedTask);
+    return {
+      id: id,
+      title: task.title,
+      description: task.description,
+      completed: task.completed,
+      ownerId: task.ownerId,
+      createdAt: now,
+    };
+  };
+
+  public updateTask = async (taskId: string, task: Task): Promise<Task> => {
+    if (taskId !== task.id) {
+      throw new Error("Task ID does not match the task object ID");
+    }
+
+    await this.drizzle
+      .update(tasks)
+      .set({
+        title: task.title,
+        description: task.description,
+        completed: task.completed,
+      })
+      .where(eq(tasks.id, task.id));
+    return task;
+  };
+
+  public deleteTask = async (taskId: string): Promise<void> => {
+    await this.drizzle.delete(tasks).where(eq(tasks.id, taskId));
   };
 }

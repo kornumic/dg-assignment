@@ -1,5 +1,74 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
+import { getAuthUser } from "@/lib/next-auth/session";
+import { TaskService } from "@/service/TaskService";
+import { TasksDrizzleRepository } from "@/repository/TaskRepository";
+import { db } from "@/lib/drizzle";
+import { updateTaskSchema } from "@/model/Task";
 
-export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const taskId = res.status(200).json({ id: "1" });
+export const GET = async ({ params }: { params: { taskId: string } }) => {
+  const authUser = await getAuthUser();
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const task = await taskService.getTaskById(params.taskId);
+
+  if (task && task.ownerId !== authUser.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  } else if (!task) {
+    return NextResponse.json({ error: "Not Found" }, { status: 404 });
+  }
+
+  return NextResponse.json(task, { status: 200 });
+};
+
+export const PATCH = async (
+  req: NextRequest,
+  { params }: { params: { taskId: string } },
+) => {
+  const authUser = await getAuthUser();
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const updateData = updateTaskSchema.safeParse(body);
+  if (!updateData.success) {
+    return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+  }
+
+  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const task = await taskService.getTaskById(params.taskId);
+
+  if (!task) {
+    return NextResponse.json({ error: "Not Found" }, { status: 404 });
+  }
+  if (task.ownerId !== authUser.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const updatedTask = await taskService.updateTask(
+    params.taskId,
+    updateData.data,
+  );
+  return NextResponse.json(updatedTask, { status: 200 });
+};
+
+export const DELETE = async ({ params }: { params: { taskId: string } }) => {
+  const authUser = await getAuthUser();
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const task = await taskService.getTaskById(params.taskId);
+  if (!task) {
+    return NextResponse.json({ error: "Not Found" }, { status: 404 });
+  }
+  if (task.ownerId !== authUser.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  await taskService.deleteTask(params.taskId);
 };
