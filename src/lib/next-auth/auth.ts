@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { loginCredentialsHandler } from "@/features/authentication/credentials/login";
+import { loginCredentialsHandler } from "@/lib/next-auth/credentials/login";
 import { ENV } from "@/lib/env";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

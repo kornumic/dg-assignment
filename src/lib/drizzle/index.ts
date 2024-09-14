@@ -16,3 +16,5 @@ export const db = drizzle(client, {
     ...tasks,
   },
 });
+
+export type DrizzleDbType = typeof db;

@@ -1,14 +1,17 @@
 import { User } from "next-auth";
-import { credentialsSigninSchema } from "@/features/authentication/credentials/schemas";
-import { selectUserByEmail } from "@/entities/user/repository";
+import { credentialsSchema } from "@/lib/next-auth/credentials/schemas";
 import { compareHashedPasswords } from "@/lib/encryption/passwords";
+import { UserService } from "@/service/UserService";
+import { UserDrizzleRepository } from "@/repository/UserRepository";
+import { db } from "@/lib/drizzle";
 
 export const loginCredentialsHandler = async (
   credentials: any,
 ): Promise<User | null> => {
-  const { email, password } =
-    await credentialsSigninSchema.parseAsync(credentials);
-  const user = await selectUserByEmail(email);
+  const { email, password } = await credentialsSchema.parseAsync(credentials);
+  const userService = new UserService(new UserDrizzleRepository(db));
+  const user = await userService.getUserByEmail(email);
+
   if (!user) {
     throw new Error("Authentication failed.");
   }
