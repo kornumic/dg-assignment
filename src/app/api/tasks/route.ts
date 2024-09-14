@@ -1,18 +1,35 @@
+import { db } from "@/lib/drizzle";
+
 import { TaskService } from "@/service/TaskService";
 import { TasksDrizzleRepository } from "@/repository/TaskRepository";
-import { db } from "@/lib/drizzle";
 import { getAuthUser } from "@/lib/next-auth/session";
 import { NextRequest, NextResponse } from "next/server";
-import { newTaskSchema } from "@/model/Task";
 
-export const GET = async () => {
+import { getTasksSearchOptionsSchema } from "@/app/api/tasks/schemas.zod";
+import { newTaskSchema } from "@/app/api/tasks/[taskId]/schemas.zod";
+
+export const GET = async (req: NextRequest) => {
+  console.log(
+    JSON.stringify(Object.fromEntries(req.nextUrl.searchParams.entries())),
+  );
+  const optionsData = getTasksSearchOptionsSchema.safeParse(
+    Object.fromEntries(req.nextUrl.searchParams.entries()),
+  );
+  if (!optionsData.success) {
+    return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+  }
+
+  const options = {
+    ...optionsData.data,
+  };
+
   const authUser = await getAuthUser();
   if (!authUser || !authUser.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const taskService = new TaskService(new TasksDrizzleRepository(db));
-  const tasks = await taskService.getUsersTasks(authUser.id);
+  const tasks = await taskService.getUsersTasks(authUser.id, options);
 
   return NextResponse.json(tasks, { status: 200 });
 };

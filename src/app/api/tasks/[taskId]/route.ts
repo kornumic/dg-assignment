@@ -1,9 +1,11 @@
+import { db } from "@/lib/drizzle";
+
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/next-auth/session";
 import { TaskService } from "@/service/TaskService";
 import { TasksDrizzleRepository } from "@/repository/TaskRepository";
-import { db } from "@/lib/drizzle";
-import { updateTaskSchema } from "@/model/Task";
+
+import { updateTaskSchema } from "@/app/api/tasks/[taskId]/schemas.zod";
 
 export const GET = async ({ params }: { params: { taskId: string } }) => {
   const authUser = await getAuthUser();

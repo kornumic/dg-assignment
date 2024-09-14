@@ -1,5 +1,5 @@
 import { DrizzleDbType } from "@/lib/drizzle";
-import { desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, like } from "drizzle-orm";
 import { NewTask, Task } from "@/model/Task";
 import { tasks, TasksInferSelect } from "@/lib/drizzle/schema/tasks/schema";
 import { generateEntityId } from "@/lib/encryption/entityIds";
@@ -11,6 +11,9 @@ export interface TasksRepository {
     ownerId: string,
     limit: number,
     offset: number,
+    query?: string,
+    sort?: "asc" | "desc",
+    completed?: boolean,
   ): Promise<Task[]>;
 
   createTask(task: NewTask): Promise<Task>;
@@ -51,10 +54,23 @@ export class TasksDrizzleRepository implements TasksRepository {
     ownerId: string,
     limit: number,
     offset: number,
+    query?: string,
+    sort?: "asc" | "desc",
+    completed?: boolean,
   ): Promise<Task[]> => {
+    // Create an array of conditions that are defined
+    let whereConditions = [
+      eq(tasks.owner_id, ownerId),
+      query ? like(tasks.title, `%${query}%`) : undefined,
+      completed !== undefined ? eq(tasks.completed, completed) : undefined,
+    ].filter((c) => c !== undefined);
+
     const existingTasks = await this.drizzle.query.tasks.findMany({
-      where: () => eq(tasks.owner_id, ownerId),
-      orderBy: () => desc(tasks.created_at),
+      where: () => {
+        return and(...whereConditions);
+      },
+      orderBy: () =>
+        sort && sort === "asc" ? asc(tasks.created_at) : desc(tasks.created_at),
       limit: limit,
       offset: offset * limit,
     });

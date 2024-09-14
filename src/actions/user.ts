@@ -1,6 +1,6 @@
 "use server";
 
-import { credentialsSchema } from "@/lib/next-auth/credentials/schemas";
+import { credentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
 import { hashSaltPassword } from "@/lib/encryption/passwords";
 import { redirect } from "next/navigation";
 import { signIn } from "@/lib/next-auth/auth";

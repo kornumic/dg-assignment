@@ -1,5 +1,5 @@
 import { User } from "next-auth";
-import { credentialsSchema } from "@/lib/next-auth/credentials/schemas";
+import { credentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
 import { compareHashedPasswords } from "@/lib/encryption/passwords";
 import { UserService } from "@/service/UserService";
 import { UserDrizzleRepository } from "@/repository/UserRepository";
