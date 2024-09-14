@@ -1,6 +1,6 @@
-import { login } from "@/features/authentication/credentials/actions";
+import { login } from "@/actions/user";
 
-const SignIn = (): JSX.Element => {
+const SignIn = () => {
   return (
     <form action={login}>
       <label>

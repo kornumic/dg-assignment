@@ -12,32 +12,30 @@ const extractTaskSelect = (task: TasksInferSelect): TaskSelect => ({
   createdAt: task.created_at,
 });
 
-export const getTaskById = async (
+export const selectTaskById = async (
   taskId: string,
 ): Promise<TaskSelect | undefined> => {
-  const existingTasks = await db
-    .select()
-    .from(tasks)
-    .where(eq(tasks.id, taskId));
+  const existingTasks = await db.query.tasks.findFirst({
+    where: () => eq(tasks.id, taskId),
+  });
 
-  if (existingTasks.length === 0) {
+  if (!existingTasks) {
     return undefined;
   }
-  return extractTaskSelect(existingTasks[0]);
+  return extractTaskSelect(existingTasks);
 };
 
-export const getTasksByOwnerId = async (
+export const selectTasksByOwnerId = async (
   ownerId: string,
   limit: number,
   offset: number,
 ): Promise<TaskSelect[]> => {
-  const existingTasks = await db
-    .select()
-    .from(tasks)
-    .where(eq(tasks.owner_id, ownerId))
-    .orderBy(desc(tasks.created_at))
-    .limit(limit)
-    .offset(offset);
+  const existingTasks = await db.query.tasks.findMany({
+    where: () => eq(tasks.owner_id, ownerId),
+    orderBy: () => desc(tasks.created_at),
+    limit: limit,
+    offset: offset * limit,
+  });
 
   return existingTasks.map(extractTaskSelect);
 };

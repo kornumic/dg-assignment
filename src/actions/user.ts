@@ -11,11 +11,9 @@ import { signIn } from "@/lib/next-auth/auth";
 import { CredentialsSignin } from "next-auth";
 
 const login = async (formData: FormData) => {
-  let data: any = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-  const { email, password } = await credentialsSigninSchema.parseAsync(data);
+  const { email, password } = await credentialsSigninSchema.parseAsync(
+    Object.fromEntries(formData),
+  );
 
   try {
     await signIn("credentials", {
@@ -32,11 +30,9 @@ const login = async (formData: FormData) => {
 };
 
 const register = async (formData: FormData) => {
-  let data: any = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-  const { email, password } = await credentialsSignupSchema.parseAsync(data);
+  const { email, password } = await credentialsSignupSchema.parseAsync(
+    Object.fromEntries(formData),
+  );
 
   const dbUser = await selectUserByEmail(email);
 

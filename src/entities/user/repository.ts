@@ -16,16 +16,15 @@ const extractUserSelect = (user: UsersInferSelect): UserSelect => ({
  */
 export const selectUserByEmail = async (
   email: string,
-): Promise<UserSelect | null> => {
-  const existingUsers: UsersInferSelect[] = await db
-    .select()
-    .from(users)
-    .where(or(eq(users.email, email)));
+): Promise<UserSelect | undefined> => {
+  const existingUser = await db.query.users.findFirst({
+    where: () => eq(users.email, email),
+  });
 
-  if (existingUsers.length === 0) {
-    return null;
+  if (!existingUser) {
+    return undefined;
   }
-  return extractUserSelect(existingUsers[0]);
+  return extractUserSelect(existingUser);
 };
 
 /**

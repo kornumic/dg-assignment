@@ -1,7 +1,6 @@
-import { register } from "@/features/authentication/credentials/actions";
-import React from "react";
+import { register } from "@/actions/user";
 
-const SignupPage: React.FC = () => {
+const SignupPage = () => {
   return (
     <div>
       <h1>Signup</h1>
