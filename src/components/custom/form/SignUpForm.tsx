@@ -106,7 +106,7 @@ const SignUpForm = () => {
           </Button>
           <div className="flex flex-row justify-center space-x-1 text-sm">
             <p>Already have an account? Login</p>
-            <Link className="text-sky-500 font-bold" href="/login">
+            <Link className="text-sky-600 font-bold" href="/login">
               here
             </Link>
             .

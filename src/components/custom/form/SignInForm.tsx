@@ -48,7 +48,7 @@ export const SignInForm: React.FC = () => {
       });
     }
     if (result.success) {
-      router.push("/");
+      router.push("/home");
     }
   };
 
@@ -87,14 +87,14 @@ export const SignInForm: React.FC = () => {
           />
           <Button
             type="submit"
-            className="flex w-full bg-sky-600"
+            className="flex w-full bg-sky-600 hover:bg-sky-800"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? "Signing in..." : "Sign in"}
           </Button>
           <div className="flex flex-row justify-center space-x-1 text-sm">
             <p>{"Don't have an account? Sign up"}</p>
-            <Link className="text-sky-500 font-bold" href="/signup">
+            <Link className="text-sky-600 font-bold" href="/signup">
               here
             </Link>
             .

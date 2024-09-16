@@ -2,7 +2,7 @@
 
 import { CredentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
 import { hashSaltPassword } from "@/lib/encryption/passwords";
-import { signIn } from "@/lib/next-auth/auth";
+import { signIn, signOut } from "@/lib/next-auth/auth";
 import { UserServiceFactory } from "@/server/service/UserService.factory";
 import { UserActionResponse } from "@/server/actions/user.zod";
 
@@ -34,6 +34,12 @@ const login = async (formData: {
   return { success: true, errors: [] };
 };
 
+const logout = async () => {
+  await signOut({
+    redirect: false,
+  });
+};
+
 const register = async (formData: {
   email: string;
   password: string;
@@ -61,4 +67,4 @@ const register = async (formData: {
   return { success: true, errors: [] };
 };
 
-export { login, register };
+export { login, logout, register };

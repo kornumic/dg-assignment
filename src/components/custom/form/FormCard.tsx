@@ -22,7 +22,7 @@ export const FormCard: React.FC<FormCardProps> = ({
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
         {cardDescription && (
-          <CardDescription className="text-sky-500">
+          <CardDescription className="text-sky-600">
             {cardDescription}
           </CardDescription>
         )}
