@@ -1,11 +1,8 @@
-import { db } from "@/lib/drizzle";
-
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/next-auth/session";
-import { TaskService } from "@/service/TaskService";
-import { TasksDrizzleRepository } from "@/repository/TaskRepository";
 
-import { updateTaskSchema } from "@/app/api/tasks/[taskId]/schemas.zod";
+import { UpdateTaskSchema } from "@/app/api/tasks/[taskId]/schemas.zod";
+import { TaskServiceFactory } from "@/server/service/TaskService.factory";
 
 export const GET = async ({ params }: { params: { taskId: string } }) => {
   const authUser = await getAuthUser();
@@ -13,7 +10,7 @@ export const GET = async ({ params }: { params: { taskId: string } }) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const taskService = await new TaskServiceFactory().getTaskService();
   const task = await taskService.getTaskById(params.taskId);
 
   if (task && task.ownerId !== authUser.id) {
@@ -35,12 +32,12 @@ export const PATCH = async (
   }
 
   const body = await req.json();
-  const updateData = updateTaskSchema.safeParse(body);
+  const updateData = UpdateTaskSchema.safeParse(body);
   if (!updateData.success) {
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });
   }
 
-  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const taskService = await new TaskServiceFactory().getTaskService();
   const task = await taskService.getTaskById(params.taskId);
 
   if (!task) {
@@ -63,7 +60,7 @@ export const DELETE = async ({ params }: { params: { taskId: string } }) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const taskService = await new TaskServiceFactory().getTaskService();
   const task = await taskService.getTaskById(params.taskId);
   if (!task) {
     return NextResponse.json({ error: "Not Found" }, { status: 404 });

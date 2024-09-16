@@ -1,16 +1,21 @@
-import { register } from "@/actions/user";
+import SignUpForm from "@/app/signup/SignUpForm";
+import { auth } from "@/lib/next-auth/auth";
+import { redirect } from "next/navigation";
+import { FormCard } from "@/components/custom/form/FormCard";
 
-const SignupPage = () => {
+const SignupPage = async () => {
+  const session = await auth();
+  if (session) {
+    redirect("/");
+  }
   return (
-    <div>
-      <h1>Signup</h1>
-      <form action={register}>
-        email
-        <input id={"email"} type={"email"} name={"email"} />
-        password
-        <input id={"password"} type={"password"} name={"password"} />
-        <button>Submit</button>
-      </form>
+    <div className="flex w-full justify-center py-16">
+      <FormCard
+        cardTitle={"Sign Up"}
+        cardDescription={"Sign up to Tasks today"}
+      >
+        <SignUpForm />
+      </FormCard>
     </div>
   );
 };

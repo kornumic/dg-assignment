@@ -1,18 +1,15 @@
-import { db } from "@/lib/drizzle";
-
-import { TaskService } from "@/service/TaskService";
-import { TasksDrizzleRepository } from "@/repository/TaskRepository";
 import { getAuthUser } from "@/lib/next-auth/session";
 import { NextRequest, NextResponse } from "next/server";
 
-import { getTasksSearchOptionsSchema } from "@/app/api/tasks/schemas.zod";
-import { newTaskSchema } from "@/app/api/tasks/[taskId]/schemas.zod";
+import { GetTasksSearchOptionsSchema } from "@/app/api/tasks/schemas.zod";
+import { NewTaskSchema } from "@/app/api/tasks/[taskId]/schemas.zod";
+import { TaskServiceFactory } from "@/server/service/TaskService.factory";
 
 export const GET = async (req: NextRequest) => {
   console.log(
     JSON.stringify(Object.fromEntries(req.nextUrl.searchParams.entries())),
   );
-  const optionsData = getTasksSearchOptionsSchema.safeParse(
+  const optionsData = GetTasksSearchOptionsSchema.safeParse(
     Object.fromEntries(req.nextUrl.searchParams.entries()),
   );
   if (!optionsData.success) {
@@ -28,7 +25,7 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const taskService = await new TaskServiceFactory().getTaskService();
   const tasks = await taskService.getUsersTasks(authUser.id, options);
 
   return NextResponse.json(tasks, { status: 200 });
@@ -41,12 +38,12 @@ export const POST = async (req: NextRequest) => {
   }
 
   const body = await req.json();
-  const newTaskData = newTaskSchema.safeParse(body);
+  const newTaskData = NewTaskSchema.safeParse(body);
   if (!newTaskData.success) {
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });
   }
 
-  const taskService = new TaskService(new TasksDrizzleRepository(db));
+  const taskService = await new TaskServiceFactory().getTaskService();
   const task = await taskService.createTask({
     ...newTaskData.data,
     completed: false,

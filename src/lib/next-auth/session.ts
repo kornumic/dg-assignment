@@ -1,7 +1,7 @@
 import { auth } from "@/lib/next-auth/auth";
 import { db } from "@/lib/drizzle";
-import { UserService } from "@/service/UserService";
-import { UserDrizzleRepository } from "@/repository/UserRepository";
+import { UserService } from "@/server/service/UserService";
+import { UserDrizzleRepository } from "@/server/repository/UserRepository";
 
 export const getAuthUser = async () => {
   const session = await auth();

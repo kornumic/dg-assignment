@@ -1,6 +1,12 @@
-import { login } from "@/actions/user";
+import { login } from "@/server/actions/user";
+import { auth } from "@/lib/next-auth/auth";
+import { redirect } from "next/navigation";
 
-const SignIn = () => {
+const SignIn = async () => {
+  const session = await auth();
+  if (session) {
+    redirect("/");
+  }
   return (
     <form action={login}>
       <label>

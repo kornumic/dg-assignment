@@ -1,16 +1,15 @@
 "use server";
 
-import { credentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
+import { CredentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
 import { hashSaltPassword } from "@/lib/encryption/passwords";
 import { redirect } from "next/navigation";
 import { signIn } from "@/lib/next-auth/auth";
 import { CredentialsSignin } from "next-auth";
-import { UserService } from "@/service/UserService";
-import { UserDrizzleRepository } from "@/repository/UserRepository";
-import { db } from "@/lib/drizzle";
+import { UserServiceFactory } from "@/server/service/UserService.factory";
+import { UserActionResponse } from "@/server/actions/user.zod";
 
 const login = async (formData: FormData) => {
-  const { email, password } = await credentialsSchema.parseAsync(
+  const { email, password } = CredentialsSchema.parse(
     Object.fromEntries(formData),
   );
 
@@ -28,23 +27,31 @@ const login = async (formData: FormData) => {
   redirect("/");
 };
 
-const register = async (formData: FormData) => {
-  const { email, password } = await credentialsSchema.parseAsync(
-    Object.fromEntries(formData),
-  );
+const register = async (formData: {
+  email: string;
+  password: string;
+}): Promise<UserActionResponse> => {
+  const { email, password } = await CredentialsSchema.parseAsync(formData);
 
-  const userService = new UserService(new UserDrizzleRepository(db));
-
+  const userService = await new UserServiceFactory().getUser();
   const dbUser = await userService.getUserByEmail(email);
 
   if (!!dbUser) {
-    throw new Error("User already exists");
+    return {
+      success: false,
+      errors: [
+        {
+          field: "email",
+          message: "User already exists.",
+        },
+      ],
+    };
   }
 
   const hashedPassword = await hashSaltPassword(password);
   await userService.createUser({ email, hashedPassword });
 
-  redirect("/login");
+  return { success: true, errors: [] };
 };
 
 export { login, register };

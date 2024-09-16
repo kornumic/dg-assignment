@@ -1,7 +1,7 @@
-import { db, DrizzleDbType } from "@/lib/drizzle";
+import { DrizzleDbType } from "@/lib/drizzle";
 import { users } from "@/lib/drizzle/schema/users/schema";
 import { eq } from "drizzle-orm";
-import { NewUser, User } from "@/model/User";
+import { NewUser, User } from "@/server/model/User";
 import { generateEntityId } from "@/lib/encryption/entityIds";
 
 export interface UserRepository {
@@ -21,13 +21,17 @@ export class UserDrizzleRepository implements UserRepository {
 
   async createUser(user: NewUser): Promise<User> {
     const id = generateEntityId();
-    db.insert(users).values({
+    await this.drizzle.insert(users).values({
       id: id,
       email: user.email,
       password: user.hashedPassword,
     });
 
-    return new User(id, user.email, user.hashedPassword);
+    return {
+      id: id,
+      email: user.email,
+      hashedPassword: user.hashedPassword,
+    } as User;
   }
 
   public async getUserByEmail(email: string): Promise<User | undefined> {
@@ -39,7 +43,11 @@ export class UserDrizzleRepository implements UserRepository {
       return undefined;
     }
 
-    return new User(existingUser.id, existingUser.email, existingUser.password);
+    return {
+      id: existingUser.id,
+      email: existingUser.email,
+      hashedPassword: existingUser.password,
+    } as User;
   }
 
   public async getUserById(id: string): Promise<User | undefined> {
@@ -51,6 +59,10 @@ export class UserDrizzleRepository implements UserRepository {
       return undefined;
     }
 
-    return new User(existingUser.id, existingUser.email, existingUser.password);
+    return {
+      id: existingUser.id,
+      email: existingUser.email,
+      hashedPassword: existingUser.password,
+    } as User;
   }
 }

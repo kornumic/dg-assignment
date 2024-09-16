@@ -1,10 +1,10 @@
 import { DrizzleDbType } from "@/lib/drizzle";
 import { and, asc, desc, eq, like } from "drizzle-orm";
-import { NewTask, Task } from "@/model/Task";
+import { NewTask, Task } from "@/server/model/Task";
 import { tasks, TasksInferSelect } from "@/lib/drizzle/schema/tasks/schema";
 import { generateEntityId } from "@/lib/encryption/entityIds";
 
-export interface TasksRepository {
+export interface TaskRepository {
   getTaskById(taskId: string): Promise<Task | undefined>;
 
   getTasksByOwnerId(
@@ -23,7 +23,7 @@ export interface TasksRepository {
   deleteTask(taskId: string): Promise<void>;
 }
 
-export class TasksDrizzleRepository implements TasksRepository {
+export class TaskDrizzleRepository implements TaskRepository {
   private drizzle: DrizzleDbType;
 
   constructor(db: DrizzleDbType) {

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const getTasksSearchOptionsSchema = z
+export const GetTasksSearchOptionsSchema = z
   .object({
     limit: z.coerce.number().int().min(0).max(50).default(10),
     offset: z.coerce.number().int().min(0).default(0),
@@ -16,3 +16,5 @@ export const getTasksSearchOptionsSchema = z
       }),
   })
   .strict();
+
+export type GetTasksSearchOptions = z.infer<typeof GetTasksSearchOptionsSchema>;

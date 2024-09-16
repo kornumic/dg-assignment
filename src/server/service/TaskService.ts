@@ -1,10 +1,10 @@
-import { TasksRepository } from "@/repository/TaskRepository";
-import { NewTask, Task } from "@/model/Task";
+import { TaskRepository } from "@/server/repository/TaskRepository";
+import { NewTask, Task } from "@/server/model/Task";
 
 export class TaskService {
-  tasksRepository: TasksRepository;
+  tasksRepository: TaskRepository;
 
-  constructor(tasksRepository: TasksRepository) {
+  constructor(tasksRepository: TaskRepository) {
     this.tasksRepository = tasksRepository;
   }
 

@@ -1,15 +1,14 @@
 import { User } from "next-auth";
-import { credentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
+import { CredentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
 import { compareHashedPasswords } from "@/lib/encryption/passwords";
-import { UserService } from "@/service/UserService";
-import { UserDrizzleRepository } from "@/repository/UserRepository";
-import { db } from "@/lib/drizzle";
+import { UserServiceFactory } from "@/server/service/UserService.factory";
 
 export const loginCredentialsHandler = async (
   credentials: any,
 ): Promise<User | null> => {
-  const { email, password } = await credentialsSchema.parseAsync(credentials);
-  const userService = new UserService(new UserDrizzleRepository(db));
+  const { email, password } = await CredentialsSchema.parseAsync(credentials);
+
+  const userService = await new UserServiceFactory().getUser();
   const user = await userService.getUserByEmail(email);
 
   if (!user) {

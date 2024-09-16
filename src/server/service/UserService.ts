@@ -1,5 +1,5 @@
-import { NewUser, User } from "@/model/User";
-import { UserRepository } from "@/repository/UserRepository";
+import { NewUser, User } from "@/server/model/User";
+import { UserRepository } from "@/server/repository/UserRepository";
 
 export class UserService {
   private userRepository: UserRepository;
