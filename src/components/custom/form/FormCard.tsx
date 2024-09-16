@@ -22,7 +22,9 @@ export const FormCard: React.FC<FormCardProps> = ({
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
         {cardDescription && (
-          <CardDescription>{cardDescription}</CardDescription>
+          <CardDescription className="text-sky-500">
+            {cardDescription}
+          </CardDescription>
         )}
       </CardHeader>
       <CardContent>{children}</CardContent>

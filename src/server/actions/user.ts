@@ -2,16 +2,15 @@
 
 import { CredentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
 import { hashSaltPassword } from "@/lib/encryption/passwords";
-import { redirect } from "next/navigation";
 import { signIn } from "@/lib/next-auth/auth";
-import { CredentialsSignin } from "next-auth";
 import { UserServiceFactory } from "@/server/service/UserService.factory";
 import { UserActionResponse } from "@/server/actions/user.zod";
 
-const login = async (formData: FormData) => {
-  const { email, password } = CredentialsSchema.parse(
-    Object.fromEntries(formData),
-  );
+const login = async (formData: {
+  email: string;
+  password: string;
+}): Promise<UserActionResponse> => {
+  const { email, password } = CredentialsSchema.parse(formData);
 
   try {
     await signIn("credentials", {
@@ -21,10 +20,18 @@ const login = async (formData: FormData) => {
       password,
     });
   } catch (error) {
-    const credentialsError = error as CredentialsSignin;
-    return credentialsError.cause;
+    console.log("Could not sign in: ", error);
+    return {
+      success: false,
+      errors: [
+        {
+          field: "email",
+          message: "Invalid credentials.",
+        },
+      ],
+    };
   }
-  redirect("/");
+  return { success: true, errors: [] };
 };
 
 const register = async (formData: {

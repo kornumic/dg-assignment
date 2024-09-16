@@ -19,13 +19,13 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const SignUpForm = () => {
+  const router = useRouter();
   const form = useForm<SignUpFormType>({
     resolver: zodResolver(SignUpFormSchema),
   });
-
-  const router = useRouter();
 
   const onSubmit = async (data: SignUpFormType) => {
     let result: UserActionResponse | undefined;
@@ -61,7 +61,11 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="shadcn" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="email@email.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -93,9 +97,20 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="flex w-full">
-            Submit
+          <Button
+            type="submit"
+            className="flex w-full bg-sky-600"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Signing up..." : "Sign up"}
           </Button>
+          <div className="flex flex-row justify-center space-x-1 text-sm">
+            <p>Already have an account? Login</p>
+            <Link className="text-sky-500 font-bold" href="/login">
+              here
+            </Link>
+            .
+          </div>
         </form>
       </Form>
     </div>

@@ -20,7 +20,7 @@ export const loginCredentialsHandler = async (
   if (!(await compareHashedPasswords(password, user.hashedPassword))) {
     throw new Error("Authentication failed.");
   }
-  console.log("User logged in", user);
+  console.debug(`User ${user.email} logged in`);
   return {
     id: user.id,
     email: user.email,

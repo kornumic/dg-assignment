@@ -1,4 +1,4 @@
-import SignUpForm from "@/app/signup/SignUpForm";
+import SignUpForm from "@/components/custom/form/SignUpForm";
 import { auth } from "@/lib/next-auth/auth";
 import { redirect } from "next/navigation";
 import { FormCard } from "@/components/custom/form/FormCard";

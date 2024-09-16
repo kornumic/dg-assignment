@@ -1,6 +1,8 @@
 import { login } from "@/server/actions/user";
 import { auth } from "@/lib/next-auth/auth";
 import { redirect } from "next/navigation";
+import { FormCard } from "@/components/custom/form/FormCard";
+import { SignInForm } from "@/components/custom/form/SignInForm";
 
 const SignIn = async () => {
   const session = await auth();
@@ -8,17 +10,14 @@ const SignIn = async () => {
     redirect("/");
   }
   return (
-    <form action={login}>
-      <label>
-        Email
-        <input name="email" type="email" />
-      </label>
-      <label>
-        Password
-        <input name="password" type="password" />
-      </label>
-      <button>Sign In</button>
-    </form>
+    <div className="flex w-full justify-center py-16">
+      <FormCard
+        cardTitle={"Sign In"}
+        cardDescription={"Your Tasks are waiting for you"}
+      >
+        <SignInForm />
+      </FormCard>
+    </div>
   );
 };
 
