@@ -1,15 +1,9 @@
 "use client";
 
-import { login } from "@/server/actions/user";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  SignInFormSchema,
-  SignInFormType,
-  UserActionResponse,
-} from "@/server/actions/user.zod";
 
 import {
   Form,
@@ -22,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { login } from "@/server/actions/auth";
+import { SignInFormSchema, SignInFormType } from "@/lib/zod/user.zod";
 
 export const SignInForm: React.FC = () => {
   const router = useRouter();
@@ -30,25 +26,25 @@ export const SignInForm: React.FC = () => {
   });
 
   const onSubmit = async (data: SignInFormType) => {
-    let result: UserActionResponse | undefined;
     try {
-      result = await login({
+      const result = await login({
         email: data.email,
         password: data.password,
       });
       console.log("result", result);
+      if (result.errors.length > 0) {
+        if (result.code === 401) {
+          form.setError("email", {
+            type: "manual",
+            message: "Invalid credentials",
+          });
+        }
+      } else if (result.success) {
+        router.push("/home");
+      }
     } catch (error) {
       console.error("error", error);
       return;
-    }
-
-    if (result.errors.length > 0) {
-      result.errors.forEach((error) => {
-        form.setError(error.field, { message: error.message });
-      });
-    }
-    if (result.success) {
-      router.push("/home");
     }
   };
 

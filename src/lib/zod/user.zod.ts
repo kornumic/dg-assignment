@@ -33,16 +33,3 @@ export const SignInFormSchema = z.object({
 });
 
 export type SignInFormType = z.infer<typeof SignInFormSchema>;
-
-export const UserActionResponseSchema = z.object({
-  success: z.boolean(),
-  data: z.any().optional(),
-  errors: z.array(
-    z.object({
-      field: z.enum(["email", "password"]),
-      message: z.string(),
-    }),
-  ),
-});
-
-export type UserActionResponse = z.infer<typeof UserActionResponseSchema>;

@@ -1,4 +1,3 @@
-import { login } from "@/server/actions/user";
 import { auth } from "@/lib/next-auth/auth";
 import { redirect } from "next/navigation";
 import { FormCard } from "@/components/custom/form/FormCard";

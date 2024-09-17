@@ -1,70 +1,32 @@
 "use server";
 
-import { CredentialsSchema } from "@/lib/next-auth/credentials/schemas.zod";
-import { hashSaltPassword } from "@/lib/encryption/passwords";
-import { signIn, signOut } from "@/lib/next-auth/auth";
+import {
+  ActionResponse,
+  errorResponse,
+  successResponse,
+} from "@/server/actions/middleware";
 import { UserServiceFactory } from "@/server/service/UserService.factory";
-import { UserActionResponse } from "@/server/actions/user.zod";
+import { hashSaltPassword } from "@/lib/encryption/passwords";
 
-const login = async (formData: {
+export type RegisterData = {
   email: string;
   password: string;
-}): Promise<UserActionResponse> => {
-  const { email, password } = CredentialsSchema.parse(formData);
-
-  try {
-    await signIn("credentials", {
-      redirect: false,
-      callbackUrl: "/",
-      email,
-      password,
-    });
-  } catch (error) {
-    console.log("Could not sign in: ", error);
-    return {
-      success: false,
-      errors: [
-        {
-          field: "email",
-          message: "Invalid credentials.",
-        },
-      ],
-    };
-  }
-  return { success: true, errors: [] };
 };
 
-const logout = async () => {
-  await signOut({
-    redirect: false,
-  });
-};
-
-const register = async (formData: {
-  email: string;
-  password: string;
-}): Promise<UserActionResponse> => {
-  const { email, password } = await CredentialsSchema.parseAsync(formData);
-
-  const userService = await new UserServiceFactory().getUser();
-  const dbUser = await userService.getUserByEmail(email);
+export const createUser = async (
+  data: RegisterData,
+): Promise<ActionResponse<undefined>> => {
+  const userService = await new UserServiceFactory().getUserService();
+  const dbUser = await userService.getUserByEmail(data.email);
 
   if (!!dbUser) {
-    return {
-      success: false,
-      errors: [
-        {
-          field: "email",
-          message: "User already exists.",
-        },
-      ],
-    };
+    return errorResponse(["User already exists"], 409);
   }
 
-  const hashedPassword = await hashSaltPassword(password);
-  await userService.createUser({ email, hashedPassword });
+  const newUser = await userService.createUser({
+    email: data.email,
+    hashedPassword: await hashSaltPassword(data.password),
+  });
 
-  return { success: true, errors: [] };
+  return successResponse(undefined);
 };
-
-export { login, logout, register };

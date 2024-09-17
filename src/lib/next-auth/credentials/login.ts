@@ -8,7 +8,7 @@ export const loginCredentialsHandler = async (
 ): Promise<User | null> => {
   const { email, password } = await CredentialsSchema.parseAsync(credentials);
 
-  const userService = await new UserServiceFactory().getUser();
+  const userService = await new UserServiceFactory().getUserService();
   const user = await userService.getUserByEmail(email);
 
   if (!user) {

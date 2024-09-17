@@ -1,4 +1,4 @@
-import z, { object, string } from "zod";
+import z from "zod";
 
 export const CredentialsSchema = z.object({
   email: z

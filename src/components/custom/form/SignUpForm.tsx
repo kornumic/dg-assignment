@@ -1,13 +1,7 @@
 "use client";
 
-import { register as signup } from "@/server/actions/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  SignUpFormType,
-  SignUpFormSchema,
-  UserActionResponse,
-} from "@/server/actions/user.zod";
 import { useRouter } from "next/navigation";
 import {
   Form,
@@ -20,6 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { createUser } from "@/server/actions/user";
+import { SignUpFormSchema, SignUpFormType } from "@/lib/zod/user.zod";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -28,25 +24,24 @@ const SignUpForm = () => {
   });
 
   const onSubmit = async (data: SignUpFormType) => {
-    let result: UserActionResponse | undefined;
     try {
-      result = await signup({
+      const result = await createUser({
         email: data.email,
         password: data.password,
       });
       console.log("result", result);
+
+      if (result.code === 409) {
+        form.setError("email", {
+          type: "manual",
+          message: "User already exists",
+        });
+      } else if (result.success) {
+        router.push("/login");
+      }
     } catch (error) {
       console.error("error", error);
       return;
-    }
-
-    if (result.errors.length > 0) {
-      result.errors.forEach((error) => {
-        form.setError(error.field, { message: error.message });
-      });
-    }
-    if (result.success) {
-      router.push("/login");
     }
   };
 
