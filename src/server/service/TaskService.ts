@@ -11,8 +11,8 @@ export class TaskService {
   public getUsersTasks = async (
     userId: string,
     options: {
-      limit: number;
-      offset: number;
+      pageSize: number;
+      page: number;
       query?: string;
       sort?: "asc" | "desc";
       completed?: boolean;
@@ -20,8 +20,8 @@ export class TaskService {
   ): Promise<Task[]> => {
     return await this.tasksRepository.getTasksByOwnerId(
       userId,
-      options.limit,
-      options.offset,
+      options.pageSize,
+      options.page,
       options?.query,
       options?.sort,
       options?.completed,

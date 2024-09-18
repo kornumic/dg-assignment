@@ -11,8 +11,8 @@ import {
 import { TaskServiceFactory } from "@/server/service/TaskService.factory";
 
 export type GetAllTasksOptions = {
-  limit: number;
-  offset: number;
+  page: number;
+  pageSize: number;
   query?: string;
   sort?: "asc" | "desc";
   completed?: boolean;
@@ -32,12 +32,16 @@ export const getAllTasks = requireAuth(
     sessionUser: User,
   ): Promise<ActionResponse<GetAllTasksData | undefined>> => {
     const taskService = await new TaskServiceFactory().getTaskService();
-    const tasks = await taskService.getUsersTasks(sessionUser.id, data);
+    console.log(data);
+    const tasks = await taskService.getUsersTasks(sessionUser.id, {
+      ...data,
+      page: data.page - 1,
+    });
 
     return successResponse({
       pagination: {
-        page: Math.floor(data.offset / data.limit),
-        pageSize: data.limit,
+        page: data.page,
+        pageSize: data.pageSize,
       },
       result: tasks,
     });

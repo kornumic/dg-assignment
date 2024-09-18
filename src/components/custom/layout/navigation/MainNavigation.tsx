@@ -20,7 +20,7 @@ export const MainNavigation: React.FC = async () => {
             <NavigationItem target={"/home"} base={"/home"} title={"Home"} />
             {!!session && (
               <NavigationItem
-                target={"/tasks"}
+                target={"/tasks?sort=desc"}
                 base={"/tasks"}
                 title={"My Tasks"}
               />

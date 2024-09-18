@@ -1,25 +1,22 @@
+import { TasksList } from "@/components/custom/tasks/TasksList";
 import { getAllTasks } from "@/server/actions/task";
+import { GetAllTasksSearchParams } from "@/app/(protected)/tasks/schema.zod";
 
-const TasksPage = async () => {
+const TasksPage = async ({
+  searchParams,
+}: {
+  searchParams: GetAllTasksSearchParams;
+}) => {
   const tasks = await getAllTasks({
-    limit: 10,
-    offset: 0,
+    page: searchParams.page || 1,
+    pageSize: searchParams.pageSize || 10,
+    completed: searchParams.completed,
+    query: searchParams.query,
+    sort: searchParams.sort,
   });
-
-  if (tasks.success && tasks.data) {
-    console.log(tasks.data?.result);
-  }
-
   return (
-    <div>
-      <h1>Tasks</h1>
-      {tasks.success &&
-        tasks.data?.result.map((task) => (
-          <div key={task.id}>
-            <p>{task.title}</p>
-            <p>{task.description}</p>
-          </div>
-        ))}
+    <div className="flex flex-col w-full justify-center items-center py-8">
+      <TasksList tasks={tasks.data?.result} />
     </div>
   );
 };

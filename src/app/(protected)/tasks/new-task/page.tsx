@@ -1,4 +1,4 @@
-import { NewTaskForm } from "@/components/custom/form/task/NewTaskForm";
+import { NewTaskForm } from "@/components/custom/tasks/forms/NewTaskForm";
 
 const NewTaskPage = () => {
   return (
