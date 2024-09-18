@@ -75,7 +75,7 @@ export const TasksPageSizePicker = ({
   return (
     <div className="flex items-center">
       <Popover open={modalOpen}>
-        <PopoverTrigger onClick={handleToggleModal}>
+        <PopoverTrigger onClick={handleToggleModal} asChild>
           <Button variant={"outline"} className="w-32">
             <FaChevronDown className="w-4 h-4 mr-2" />
             Page size

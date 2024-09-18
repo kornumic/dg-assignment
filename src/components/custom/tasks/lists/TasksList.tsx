@@ -44,7 +44,7 @@ export const TasksList = ({ pagination, tasks }: TasksListProps) => {
       <TasksListHeader />
       <div className="flex flex-col w-full h-full items-center">
         {
-          <ul className="flex flex-col w-2/3 h-full space-y-4 justify-center">
+          <ul className="flex flex-col w-2/3 h-full space-y-4 justify-start">
             {tasks.map((task) => (
               <TasksListItem key={task.id} task={task} />
             ))}

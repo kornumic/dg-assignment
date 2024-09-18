@@ -14,7 +14,6 @@ export const dbConnection = async () => {
     });
   }
 
-  await pool.connect();
   return drizzle(pool, {
     schema: {
       ...users,
