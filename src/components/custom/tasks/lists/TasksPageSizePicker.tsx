@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Popover,
   PopoverContent,
@@ -84,7 +82,7 @@ export const TasksPageSizePicker = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="flex flex-col px-2 w-32 space-y-2">
-          <Label className="px-2">Sort by date</Label>
+          <Label className="px-2">Tasks per page</Label>
           <ul className="flex flex-col w-full">
             <SizeOption
               title={"5"}

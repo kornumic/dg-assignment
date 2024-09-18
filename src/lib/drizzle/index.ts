@@ -5,10 +5,14 @@ import { ENV } from "@/lib/env";
 import * as users from "@/lib/drizzle/schema/users/schema";
 import * as tasks from "@/lib/drizzle/schema/tasks/schema";
 
+let pool: Pool | undefined;
+
 export const dbConnection = async () => {
-  const pool = new Pool({
-    connectionString: ENV.DATABASE_URL,
-  });
+  if (!pool) {
+    pool = new Pool({
+      connectionString: ENV.DATABASE_URL,
+    });
+  }
 
   await pool.connect();
   return drizzle(pool, {

@@ -38,7 +38,7 @@ export const TasksListFooter = ({ pagination }: TasksListFooterProps) => {
   };
 
   return (
-    <Pagination>
+    <Pagination className="py-4">
       <PaginationContent>
         <div className="w-28 h-10">
           {pagination.page - 1 > 0 && (

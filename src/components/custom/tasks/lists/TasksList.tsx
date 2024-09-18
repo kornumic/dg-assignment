@@ -8,6 +8,8 @@ import {
   GetAllTasksSearchParams,
   GetAllTasksSearchParamsSchema,
 } from "@/app/(protected)/tasks/schema.zod";
+import { TasksListItem } from "@/components/custom/tasks/lists/TasksListItem";
+import { Separator } from "@/components/ui/separator";
 
 export const extractQueryParams = (
   readOnlyUrlSearchParams: ReadonlyURLSearchParams,
@@ -38,16 +40,12 @@ export type TasksListProps = {
 
 export const TasksList = ({ pagination, tasks }: TasksListProps) => {
   return (
-    <div className="flex flex-col w-full px-36">
+    <div className="flex flex-col items-center w-full px-36">
       <TasksListHeader />
       {
-        <ul>
+        <ul className="flex flex-col w-2/3 space-y-4">
           {tasks.map((task) => (
-            <li key={task.id}>
-              <p>{task.title}</p>
-              <p>{task.description}</p>
-              <p>{task.completed.toString()}</p>
-            </li>
+            <TasksListItem key={task.id} task={task} />
           ))}
           {tasks.length === 0 && <p>No tasks found</p>}
         </ul>
