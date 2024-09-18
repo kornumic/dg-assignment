@@ -22,8 +22,9 @@ export type GetAllTasksData = {
   pagination: {
     page: number;
     pageSize: number;
+    totalPages: number;
   };
-  result: Task[];
+  tasks: Task[];
 };
 
 export const getAllTasks = requireAuth(
@@ -32,18 +33,18 @@ export const getAllTasks = requireAuth(
     sessionUser: User,
   ): Promise<ActionResponse<GetAllTasksData | undefined>> => {
     const taskService = await new TaskServiceFactory().getTaskService();
-    console.log(data);
-    const tasks = await taskService.getUsersTasks(sessionUser.id, {
+    const usersTasks = await taskService.getUsersTasks(sessionUser.id, {
       ...data,
       page: data.page - 1,
     });
 
     return successResponse({
       pagination: {
-        page: data.page,
-        pageSize: data.pageSize,
+        page: usersTasks.metadata.page + 1,
+        pageSize: usersTasks.metadata.pageSize,
+        totalPages: usersTasks.metadata.totalPages,
       },
-      result: tasks,
+      tasks: usersTasks.tasks,
     });
   },
 );

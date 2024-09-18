@@ -17,8 +17,19 @@ export class TaskService {
       sort?: "asc" | "desc";
       completed?: boolean;
     },
-  ): Promise<Task[]> => {
-    return await this.tasksRepository.getTasksByOwnerId(
+  ): Promise<{
+    metadata: {
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    };
+    tasks: Task[];
+  }> => {
+    if (options.page < 0) {
+      throw new Error("Page number must be greater than 0");
+    }
+
+    const tasksByOwnerId = await this.tasksRepository.getTasksByOwnerId(
       userId,
       options.pageSize,
       options.page,
@@ -26,6 +37,18 @@ export class TaskService {
       options?.sort,
       options?.completed,
     );
+
+    const totalPages = Math.ceil(
+      tasksByOwnerId.metadata.count / options.pageSize,
+    );
+    return {
+      metadata: {
+        page: options.page,
+        pageSize: options.pageSize,
+        totalPages: totalPages,
+      },
+      tasks: tasksByOwnerId.tasks,
+    };
   };
 
   public getTaskById = async (taskId: string) => {

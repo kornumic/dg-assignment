@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/popover";
 import { IoCheckmark } from "react-icons/io5";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { FaFilter } from "react-icons/fa";
 
@@ -77,6 +77,17 @@ export const TasksFiltersPopover = ({
     }
     handleCloseModal();
   };
+
+  useEffect(() => {
+    const handleCancel = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleCancel);
+
+    return () => window.removeEventListener("keydown", handleCancel);
+  });
 
   return (
     <div>

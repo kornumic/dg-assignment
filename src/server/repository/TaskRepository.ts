@@ -1,5 +1,5 @@
 import { DrizzleDbType } from "@/lib/drizzle";
-import { and, asc, desc, eq, like } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, sql } from "drizzle-orm";
 import { NewTask, Task } from "@/server/model/Task";
 import { tasks, TasksInferSelect } from "@/lib/drizzle/schema/tasks/schema";
 import { generateEntityId } from "@/lib/encryption/entityIds";
@@ -14,7 +14,12 @@ export interface TaskRepository {
     query?: string,
     sort?: "asc" | "desc",
     completed?: boolean,
-  ): Promise<Task[]>;
+  ): Promise<{
+    metadata: {
+      count: number;
+    };
+    tasks: Task[];
+  }>;
 
   createTask(task: NewTask): Promise<Task>;
 
@@ -57,11 +62,16 @@ export class TaskDrizzleRepository implements TaskRepository {
     query?: string,
     sort?: "asc" | "desc",
     completed?: boolean,
-  ): Promise<Task[]> => {
+  ): Promise<{
+    metadata: {
+      count: number;
+    };
+    tasks: Task[];
+  }> => {
     // Create an array of conditions that are defined
     let whereConditions = [
       eq(tasks.owner_id, ownerId),
-      query ? like(tasks.title, `%${query}%`) : undefined,
+      query ? ilike(tasks.title, `%${query}%`) : undefined,
       completed !== undefined ? eq(tasks.completed, completed) : undefined,
     ].filter((c) => c !== undefined);
 
@@ -75,7 +85,24 @@ export class TaskDrizzleRepository implements TaskRepository {
       offset: offset * limit,
     });
 
-    return existingTasks.map(this.extractTaskSelect);
+    const tasksCount = (
+      await this.drizzle
+        .select({
+          count: sql<number>`cast(count(${tasks.id}) as int)`,
+        })
+        .from(tasks)
+        .where(() => {
+          return and(...whereConditions);
+        })
+        .execute()
+    )[0].count;
+
+    return {
+      metadata: {
+        count: tasksCount,
+      },
+      tasks: existingTasks.map(this.extractTaskSelect),
+    };
   };
 
   public createTask = async (task: NewTask): Promise<Task> => {
@@ -106,14 +133,21 @@ export class TaskDrizzleRepository implements TaskRepository {
       throw new Error("Task ID does not match the task object ID");
     }
 
-    await this.drizzle
+    const result = await this.drizzle
       .update(tasks)
       .set({
         title: task.title,
         description: task.description,
         completed: task.completed,
       })
-      .where(eq(tasks.id, task.id));
+      .where(eq(tasks.id, task.id))
+      .execute();
+
+    if (result.rowCount && result.rowCount !== 1) {
+      console.warn(
+        `Exactly one task should have been affected, instead ${result.rowCount} were affected`,
+      );
+    }
     return task;
   };
 

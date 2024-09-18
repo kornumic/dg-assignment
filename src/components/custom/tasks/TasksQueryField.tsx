@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const TasksQueryField = ({
   updateQuery,
@@ -8,9 +8,21 @@ export const TasksQueryField = ({
   updateQuery: (query: string | undefined) => void;
 }) => {
   const [query, setQuery] = useState<string | undefined>(undefined);
+
   const handleQueryChange = () => {
     updateQuery(query && query.length > 0 ? query : undefined);
   };
+
+  useEffect(() => {
+    const handleSubmit = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleQueryChange();
+      }
+    };
+    window.addEventListener("keydown", handleSubmit);
+
+    return () => window.removeEventListener("keydown", handleSubmit);
+  });
 
   return (
     <div className="flex flex-row w-72 relative">
