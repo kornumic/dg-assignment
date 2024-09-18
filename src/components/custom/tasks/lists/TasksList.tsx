@@ -1,8 +1,8 @@
 "use client";
 
-import { TasksListHeader } from "@/components/custom/tasks/TasksListHeader";
+import { TasksListHeader } from "@/components/custom/tasks/lists/TasksListHeader";
 import { Task } from "@/server/model/Task";
-import { TasksListFooter } from "@/components/custom/tasks/TasksListFooter";
+import { TasksListFooter } from "@/components/custom/tasks/lists/TasksListFooter";
 import { ReadonlyURLSearchParams } from "next/navigation";
 import {
   GetAllTasksSearchParams,

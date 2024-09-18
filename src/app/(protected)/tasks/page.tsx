@@ -1,4 +1,4 @@
-import { TasksList } from "@/components/custom/tasks/TasksList";
+import { TasksList } from "@/components/custom/tasks/lists/TasksList";
 import { getAllTasks } from "@/server/actions/task";
 import {
   GetAllTasksSearchParams,

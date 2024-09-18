@@ -10,7 +10,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useSearchParams } from "next/navigation";
-import { extractQueryParams } from "@/components/custom/tasks/TasksList";
+import { extractQueryParams } from "@/components/custom/tasks/lists/TasksList";
 
 export type TasksListFooterProps = {
   pagination: {

@@ -33,7 +33,7 @@ const SizeOption = ({
   );
 };
 
-export const TasksPageSizeSelector = ({
+export const TasksPageSizePicker = ({
   pageSize,
   setPageSize,
 }: {

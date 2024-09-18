@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { TasksFiltersPopover } from "@/components/custom/tasks/TasksFiltersPopover";
-import { TasksQueryField } from "@/components/custom/tasks/TasksQueryField";
-import { extractQueryParams } from "@/components/custom/tasks/TasksList";
-import { TasksPageSizeSelector } from "@/components/custom/tasks/TasksPageSizeSelector";
+import { TasksFiltersPopover } from "@/components/custom/tasks/lists/TasksFiltersPopover";
+import { TasksQueryField } from "@/components/custom/tasks/lists/TasksQueryField";
+import { extractQueryParams } from "@/components/custom/tasks/lists/TasksList";
+import { TasksPageSizePicker } from "@/components/custom/tasks/lists/TasksPageSizePicker";
 
 export const TasksListHeader = () => {
   const searchParams = useSearchParams();
@@ -68,7 +68,7 @@ export const TasksListHeader = () => {
         <h1 className="text-xl font-bold">Tasks</h1>
       </div>
       <div className="flex flex-row w-fit items-center space-x-4">
-        <TasksPageSizeSelector
+        <TasksPageSizePicker
           pageSize={pageSize}
           setPageSize={handlePageSizeChange}
         />
