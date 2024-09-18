@@ -24,6 +24,7 @@ export type GetAllTasksData = {
     page: number;
     pageSize: number;
     totalPages: number;
+    totalTasks: number;
   };
   tasks: Task[];
 };
@@ -44,6 +45,7 @@ export const getAllTasks = requireAuth(
         page: usersTasks.metadata.page + 1,
         pageSize: usersTasks.metadata.pageSize,
         totalPages: usersTasks.metadata.totalPages,
+        totalTasks: usersTasks.metadata.totalTasks,
       },
       tasks: usersTasks.tasks,
     });

@@ -22,6 +22,7 @@ export class TaskService {
       page: number;
       pageSize: number;
       totalPages: number;
+      totalTasks: number;
     };
     tasks: Task[];
   }> => {
@@ -46,6 +47,7 @@ export class TaskService {
         page: options.page,
         pageSize: options.pageSize,
         totalPages: totalPages,
+        totalTasks: tasksByOwnerId.metadata.count,
       },
       tasks: tasksByOwnerId.tasks,
     };

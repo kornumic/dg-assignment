@@ -4,7 +4,7 @@ import { FormCard } from "@/components/custom/form/FormCard";
 const NewTaskPage = () => {
   return (
     <div className="flex w-full justify-center items-center">
-      <div className="flex w-1/3">
+      <div className="flex w-1/3 my-8">
         <FormCard
           cardTitle={"New Task"}
           cardDescription={"Fill the form to create new Task"}

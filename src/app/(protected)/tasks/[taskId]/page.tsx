@@ -13,7 +13,7 @@ const TaskUpdatePage = async ({ params }: { params: { taskId: string } }) => {
 
   return (
     <div className="flex w-full justify-center items-center">
-      <div className="flex w-1/3">
+      <div className="flex w-1/3 my-8">
         {task.success && task.data && (
           <FormCard
             cardTitle={"Edit task"}
