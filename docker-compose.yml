@@ -1,19 +1,31 @@
 version: '3.9'
 
 services:
+  next-app:
+    container_name: dg-assignment-app
+    image: kornumic/dg-assignment-app
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
   db:
+    container_name: dg-assignment-db
     image: postgres
     restart: always
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=tasks
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
   adminer:
     image: adminer
     restart: always
     ports:
       - "8080:8080"
+
+volumes:
+  pgdata: { }
