@@ -33,7 +33,7 @@ export const TasksListItem = ({ task }: { task: Task }) => {
               : "bg-orange-400 hover:bg-orange-300"
           }`}
         >
-          {task.completed ? "Completed" : "Incomplete"}
+          {task.completed ? "Completed" : "Not completed"}
         </Badge>
         <div className="flex flex-row justify-end w-full select-none">
           <div className="align-bottom text-lg">

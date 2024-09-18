@@ -46,7 +46,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="flex flex-col w-96">
+    <div className="flex flex-col w-full">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

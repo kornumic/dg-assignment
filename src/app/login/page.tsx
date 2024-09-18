@@ -9,13 +9,15 @@ const SignIn = async () => {
     redirect("/");
   }
   return (
-    <div className="flex w-full justify-center py-16">
-      <FormCard
-        cardTitle={"Sign In"}
-        cardDescription={"Your Tasks are waiting for you"}
-      >
-        <SignInForm />
-      </FormCard>
+    <div className="flex w-full justify-center items-center py-16">
+      <div className="flex w-1/3 justify-center">
+        <FormCard
+          cardTitle={"Sign In"}
+          cardDescription={"Your Tasks are waiting for you"}
+        >
+          <SignInForm />
+        </FormCard>
+      </div>
     </div>
   );
 };

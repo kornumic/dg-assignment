@@ -13,12 +13,12 @@ const TasksPage = async ({
 }) => {
   const parsedParams = GetAllTasksSearchParamsSchema.safeParse(searchParams);
   if (parsedParams.error) {
-    redirect("/tasks?page=1&pageSize=10");
+    redirect("/tasks?page=1&pageSize=5");
   }
 
   const tasks = await getAllTasks({
     page: parsedParams.data.page || 1,
-    pageSize: parsedParams.data.pageSize || 10,
+    pageSize: parsedParams.data.pageSize || 5,
     completed: parsedParams.data.completed,
     query: parsedParams.data.query,
     sort: parsedParams.data.sort,

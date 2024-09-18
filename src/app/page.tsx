@@ -1,14 +1,7 @@
-import { auth } from "@/lib/next-auth/auth";
+import { redirect } from "next/navigation";
 
 const Home = async () => {
-  const session = await auth();
-  return (
-    <div>
-      <h1>Home</h1>
-      <p>Welcome to the home page</p>
-      <div>{JSON.stringify(session)}</div>
-    </div>
-  );
+  redirect("/home");
 };
 
 export default Home;

@@ -10,12 +10,14 @@ const SignupPage = async () => {
   }
   return (
     <div className="flex w-full justify-center py-16">
-      <FormCard
-        cardTitle={"Sign Up"}
-        cardDescription={"Sign up to Tasks today"}
-      >
-        <SignUpForm />
-      </FormCard>
+      <div className="flex w-1/3 justify-center">
+        <FormCard
+          cardTitle={"Sign Up"}
+          cardDescription={"Sign up to Tasks today"}
+        >
+          <SignUpForm />
+        </FormCard>
+      </div>
     </div>
   );
 };

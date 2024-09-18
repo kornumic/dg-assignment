@@ -15,7 +15,6 @@ import {
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Text } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 export const NewTaskForm = () => {
@@ -41,7 +40,7 @@ export const NewTaskForm = () => {
       }
     } catch (error) {
       console.error("error", error);
-      toast("Event has been created");
+      toast("Something went wrong");
       return;
     }
   };

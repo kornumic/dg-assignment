@@ -22,7 +22,7 @@ export const extractQueryParams = (
     console.log(JSON.stringify(currentParams.error));
     return {
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
     } as GetAllTasksSearchParams;
   }
 

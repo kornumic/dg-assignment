@@ -108,7 +108,12 @@ export type PatchTaskData = {
 
 export const patchTask = requireAuth(
   async (
-    data: { id: string; title: string; description: string },
+    data: {
+      id: string;
+      title: string;
+      description: string | undefined;
+      completed: boolean;
+    },
     sessionUser: User,
   ): Promise<ActionResponse<PatchTaskData | undefined>> => {
     const taskService = await new TaskServiceFactory().getTaskService();
@@ -125,6 +130,7 @@ export const patchTask = requireAuth(
       const updatedTask = await taskService.updateTask(data.id, {
         title: data.title,
         description: data.description,
+        completed: data.completed,
       });
       return successResponse({
         id: updatedTask.id,

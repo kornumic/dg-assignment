@@ -11,7 +11,7 @@ import { FiPlus } from "react-icons/fi";
 
 export const TasksListHeader = () => {
   const searchParams = useSearchParams();
-  const pageSize = parseInt(searchParams.get("pageSize") || "10");
+  const pageSize = parseInt(searchParams.get("pageSize") || "5");
   const router = useRouter();
 
   const handleQueryChange = (query: string | undefined) => {
