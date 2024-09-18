@@ -15,14 +15,14 @@ import { FiEdit2 } from "react-icons/fi";
 export const TasksListItem = ({ task }: { task: Task }) => {
   return (
     <Card className="flex flex-row hover:bg-secondary transition-all">
-      <CardHeader className="w-1/3 p-4">
+      <CardHeader className="w-2/3 p-4">
         <Link href={`/tasks/${task.id}`}>
-          <CardTitle className="w-full h-6 hover:text-sky-800 transition-all text-pretty text-clip">
+          <CardTitle className="w-full h-6 hover:text-sky-800 transition-all overflow-hidden truncate">
             {task.title}
           </CardTitle>
         </Link>
         <CardDescription className="w-full h-10 text-sky-600 overflow-ellipsis overflow-clip">
-          {task.description}
+          {task.description ?? "No description"}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col justify-between items-end w-full py-4">

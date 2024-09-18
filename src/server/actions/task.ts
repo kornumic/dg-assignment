@@ -80,7 +80,7 @@ export type PostTaskData = {
 
 export const postTask = requireAuth(
   async (
-    data: { title: string; description: string },
+    data: { title: string; description: string | undefined },
     sessionUser: User,
   ): Promise<ActionResponse<PostTaskData | undefined>> => {
     const taskService = await new TaskServiceFactory().getTaskService();

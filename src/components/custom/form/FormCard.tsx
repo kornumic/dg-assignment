@@ -18,7 +18,7 @@ export const FormCard: React.FC<FormCardProps> = ({
   cardDescription,
 }) => {
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col w-full">
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
         {cardDescription && (

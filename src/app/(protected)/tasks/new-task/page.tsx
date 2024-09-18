@@ -1,10 +1,17 @@
 import { NewTaskForm } from "@/components/custom/tasks/forms/NewTaskForm";
+import { FormCard } from "@/components/custom/form/FormCard";
 
 const NewTaskPage = () => {
   return (
-    <div>
-      <h1>New Task</h1>
-      <NewTaskForm />
+    <div className="flex w-full justify-center items-center">
+      <div className="flex w-1/3">
+        <FormCard
+          cardTitle={"New Task"}
+          cardDescription={"Fill the form to create new Task"}
+        >
+          <NewTaskForm />
+        </FormCard>
+      </div>
     </div>
   );
 };
