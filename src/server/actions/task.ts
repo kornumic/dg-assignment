@@ -9,6 +9,7 @@ import {
   successResponse,
 } from "@/server/actions/middleware";
 import { TaskServiceFactory } from "@/server/service/TaskService.factory";
+import { revalidatePath } from "next/cache";
 
 export type GetAllTasksOptions = {
   page: number;
@@ -91,6 +92,8 @@ export const postTask = requireAuth(
         completed: false,
         ownerId: sessionUser.id,
       });
+
+      revalidatePath("/tasks");
       return successResponse({
         id: task.id,
         title: task.title,
@@ -132,6 +135,8 @@ export const patchTask = requireAuth(
         description: data.description,
         completed: data.completed,
       });
+      revalidatePath("/tasks");
+      revalidatePath(`/tasks/${data.id}`);
       return successResponse({
         id: updatedTask.id,
         title: updatedTask.title,
@@ -163,6 +168,8 @@ export const deleteTask = requireAuth(
 
     try {
       await taskService.deleteTask(data.id);
+      revalidatePath("/tasks");
+      revalidatePath(`/tasks/${data.id}`);
       return successResponse(data);
     } catch (error) {
       return errorResponse(["An unknown error occurred"], 500);
