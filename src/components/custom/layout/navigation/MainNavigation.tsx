@@ -26,7 +26,10 @@ export const MainNavigation: React.FC = async () => {
               />
             )}
           </ul>
-          <div>
+          <div className="flex flex-row w-fit items-center space-x-4">
+            {!!session && session.user && (
+              <p className="text-lg h-fit text-center">{session.user.email}</p>
+            )}
             {!session && <LoginButton />}
             {!!session && <LogoutButton />}
           </div>

@@ -40,16 +40,24 @@ export type TasksListProps = {
 
 export const TasksList = ({ pagination, tasks }: TasksListProps) => {
   return (
-    <div className="flex flex-col items-center w-full px-36">
+    <div className="flex flex-col items-center w-full h-full px-36">
       <TasksListHeader />
-      {
-        <ul className="flex flex-col w-2/3 space-y-4">
-          {tasks.map((task) => (
-            <TasksListItem key={task.id} task={task} />
-          ))}
-          {tasks.length === 0 && <p>No tasks found</p>}
-        </ul>
-      }
+      <div className="flex flex-col w-full h-full items-center">
+        {
+          <ul className="flex flex-col w-2/3 h-full space-y-4 justify-center">
+            {tasks.map((task) => (
+              <TasksListItem key={task.id} task={task} />
+            ))}
+            {tasks.length === 0 && (
+              <div className="flex flex-row w-full h-fit justify-center ">
+                <h2 className="flex w-fit align-middle text-2xl text-sky-600">
+                  No tasks found
+                </h2>
+              </div>
+            )}
+          </ul>
+        }
+      </div>
       <div className="flex w-full">
         <TasksListFooter pagination={pagination} />
       </div>

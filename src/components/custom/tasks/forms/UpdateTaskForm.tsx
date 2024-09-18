@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { UpdateTaskFormSchema, UpdateTaskFormType } from "@/lib/zod/task.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
