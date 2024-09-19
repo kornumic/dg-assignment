@@ -33,7 +33,7 @@ export const NewTaskForm = () => {
       console.log("result", result);
 
       if (result.success && result.data) {
-        router.push(`/tasks/${result.data.id}`);
+        router.push(`/tasks`);
         toast("Task has been created");
       } else {
         toast("Task creation failed");

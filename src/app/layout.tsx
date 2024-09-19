@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex flex-col w-full h-screen">
+        <div className="flex flex-col w-full min-h-screen">
           <SessionProvider>
             <MainNavigation />
             {children}

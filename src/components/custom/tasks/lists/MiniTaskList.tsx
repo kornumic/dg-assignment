@@ -14,7 +14,7 @@ import { AllTasksButton } from "@/components/custom/buttons/AllTasksButton";
 export const MiniTaskList = async () => {
   const tasks = await getAllTasks({
     page: 1,
-    pageSize: 5,
+    pageSize: 3,
     completed: false,
     query: "",
     sort: "asc",
