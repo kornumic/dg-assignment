@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "auth:secret": "openssl rand -base64 33",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit migrate",
     "db:migrate": "npm run db:generate && npm run db:push"
