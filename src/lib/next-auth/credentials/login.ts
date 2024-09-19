@@ -6,7 +6,14 @@ import { UserServiceFactory } from "@/server/service/UserService.factory";
 export const loginCredentialsHandler = async (
   credentials: any,
 ): Promise<User | null> => {
-  const { email, password } = await CredentialsSchema.parseAsync(credentials);
+  const { data, success } = CredentialsSchema.safeParse(credentials);
+  if (!success) {
+    throw new Error("Invalid credentials");
+  }
+  const { email, password } = data;
+  if (!email || !password) {
+    throw new Error("Invalid credentials");
+  }
 
   const userService = await new UserServiceFactory().getUserService();
   const user = await userService.getUserByEmail(email);

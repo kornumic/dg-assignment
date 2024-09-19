@@ -6,6 +6,7 @@ import {
   errorResponse,
   successResponse,
 } from "@/server/actions/middleware";
+import { CredentialsSignin } from "next-auth";
 
 export type LoginData = {
   email: string;
@@ -21,8 +22,14 @@ const login = async (data: LoginData): Promise<ActionResponse<undefined>> => {
       password: data.password,
     });
   } catch (error) {
-    console.log("Could not sign in: ", error);
-    return errorResponse(["Invalid credentials"], 401);
+    if (error instanceof Error) {
+      console.log(
+        `Could not sign in with email ${data.email}: `,
+        error.message,
+      );
+      return errorResponse("Invalid credentials", 400);
+    }
+    return errorResponse("Could not sign in", 500);
   }
   return successResponse(undefined);
 };
@@ -34,7 +41,7 @@ const logout = async (): Promise<ActionResponse<undefined>> => {
     });
   } catch (error) {
     console.log("Could not sign out: ", error);
-    return errorResponse(["Could not sign out"], 500);
+    return errorResponse("Could not sign out", 500);
   }
   return successResponse(undefined);
 };

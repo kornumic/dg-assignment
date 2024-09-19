@@ -65,11 +65,11 @@ export const getTask = requireAuth(
     const task = await taskService.getTaskById(data.taskId);
 
     if (!task) {
-      return errorResponse(["Task not found"], 404);
+      return errorResponse("Task not found", 404);
     }
 
     if (task.ownerId !== sessionUser.id) {
-      return errorResponse(["Forbidden"], 403);
+      return errorResponse("Forbidden", 403);
     }
 
     return successResponse(task);
@@ -101,7 +101,7 @@ export const postTask = requireAuth(
         title: task.title,
       });
     } catch (error) {
-      return errorResponse(["An unknown error occurred"], 500);
+      return errorResponse("An unknown error occurred", 500);
     }
   },
 );
@@ -125,10 +125,10 @@ export const patchTask = requireAuth(
 
     const task = await taskService.getTaskById(data.id);
     if (!task) {
-      return errorResponse(["Task not found"], 404);
+      return errorResponse("Task not found", 404);
     }
     if (task.ownerId !== sessionUser.id) {
-      return errorResponse(["Forbidden"], 403);
+      return errorResponse("Forbidden", 403);
     }
 
     try {
@@ -144,7 +144,7 @@ export const patchTask = requireAuth(
         title: updatedTask.title,
       });
     } catch (error) {
-      return errorResponse(["An unknown error occurred"], 500);
+      return errorResponse("An unknown error occurred", 500);
     }
   },
 );
@@ -162,10 +162,10 @@ export const deleteTask = requireAuth(
 
     const task = await taskService.getTaskById(data.id);
     if (!task) {
-      return errorResponse(["Task not found"], 404);
+      return errorResponse("Task not found", 404);
     }
     if (task.ownerId !== sessionUser.id) {
-      return errorResponse(["Forbidden"], 403);
+      return errorResponse("Forbidden", 403);
     }
 
     try {
@@ -174,7 +174,7 @@ export const deleteTask = requireAuth(
       revalidatePath(`/tasks/${data.id}`);
       return successResponse(data);
     } catch (error) {
-      return errorResponse(["An unknown error occurred"], 500);
+      return errorResponse("An unknown error occurred", 500);
     }
   },
 );

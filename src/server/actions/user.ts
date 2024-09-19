@@ -20,7 +20,7 @@ export const createUser = async (
   const dbUser = await userService.getUserByEmail(data.email);
 
   if (!!dbUser) {
-    return errorResponse(["User already exists"], 409);
+    return errorResponse("User already exists", 409);
   }
 
   const newUser = await userService.createUser({

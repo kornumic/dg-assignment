@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { login } from "@/server/actions/auth";
 import { SignInFormSchema, SignInFormType } from "@/lib/zod/user.zod";
+import { toast } from "sonner";
+import React from "react";
 
 export const SignInForm: React.FC = () => {
   const router = useRouter();
@@ -32,18 +34,22 @@ export const SignInForm: React.FC = () => {
         password: data.password,
       });
       console.log("result", result);
-      if (result.errors.length > 0) {
-        if (result.code === 401) {
+
+      if (!result.success) {
+        toast("Login failed, invalid credentials");
+        if (result.code !== 500) {
           form.setError("email", {
-            type: "manual",
-            message: "Invalid credentials",
+            message: result.error,
           });
         }
       } else if (result.success) {
         router.push("/home");
+      } else {
+        toast("Login failed, please try again");
       }
     } catch (error) {
       console.error("error", error);
+      toast("Something went wrong");
       return;
     }
   };
@@ -65,6 +71,7 @@ export const SignInForm: React.FC = () => {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
