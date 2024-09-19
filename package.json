@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -10,7 +11,7 @@
     "auth:secret": "openssl rand -base64 33",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit migrate",
-    "db:migrate": "npm run db:generate && npm run db:push"
+    "db:migrate": "pnpm run db:generate && pnpm run db:push"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.2",

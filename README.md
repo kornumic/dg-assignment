@@ -20,7 +20,7 @@ The application will be running on `http://localhost:3000`.
 You might have to run the following command to run the migrations:
 
 ```bash
-npm run db:migrate
+pnpm run db:migrate
 ```
 
 ## Running the application (without Docker, only postgres)
@@ -28,22 +28,22 @@ npm run db:migrate
 You have to have node-v20 installed on your machine. You can install dependencies by running the following command:
 
 ```bash
-npm install
+pnpm install
 docker compose up -d postgres
-npm run db:migrate
+pnpm run db:migrate
 ```
 
 Then you can run the following command to start the application:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Or production mode:
 
 ```bash
-npm run build
-npm start
+pnpm run build
+pnpm start
 ```
 
 Application should be running on `http://localhost:3000`.
